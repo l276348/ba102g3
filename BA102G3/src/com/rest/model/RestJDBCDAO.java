@@ -17,12 +17,13 @@ public class RestJDBCDAO implements RestDAO_Interface {
 	String passwd = "123456";
 	private static final String INSERT_STMT = 
 			"INSERT INTO rest (rest_id,user_id,rest_name,rest_address,rest_phone,rest_trans,rest_detail,rest_hours,"
-			+ "rest_ter,rest_floor,rest_lon,rest_lat,rest_inout,rest_type,rest_count,rest_score) VALUES (rest_sq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ "rest_ter,rest_floor,rest_lon,rest_lat,rest_inout,rest_type,rest_count,rest_score) VALUES (rest_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE = 
 			"DELETE FROM REST where REST_ID = ?";	
 	private static final String GET_ALL_STMT = "SELECT * FROM REST";
 	private static final String GET_ONE_STMT = "SELECT rest_id,rest_name,rest_phone FROM rest where rest_id = ?";
-	
+	private static final String UPDATE = 
+			"UPDATE REST set REST_PHONE=?, REST_DETAIL=? where USER_ID = ?";
 	@Override
 	public void insert(RestVO restVO) {
 		Connection con = null;
@@ -83,7 +84,46 @@ public class RestJDBCDAO implements RestDAO_Interface {
 
 	@Override
 	public void update(RestVO restVO) {
-		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(UPDATE);
+			
+			pstmt.setString(1, restVO.getRest_phone());
+			pstmt.setString(2, restVO.getRest_detail());
+			pstmt.setInt(3, restVO.getUser_id());
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 
 	}
 
@@ -268,26 +308,34 @@ public class RestJDBCDAO implements RestDAO_Interface {
 		RestJDBCDAO dao = new RestJDBCDAO();
 	
 		//新增
-//		RestVO restin = new RestVO();
-//		restin.setUser_id(1000047);
-//		restin.setRest_name("秀梅");
-//		restin.setRest_address("中大");
-//		restin.setRest_phone("");
-//		restin.setRest_trans("");
-//		restin.setRest_detail("");
-//		restin.setRest_hours("");
-//		restin.setRest_ter(2);
-//		restin.setRest_floor(3);
-//		restin.setRest_lon(new Double(121.000));
-//		restin.setRest_lat(new Double(25.333));
-//		restin.setRest_inout(2);
-//		restin.setRest_type(3);
-//		restin.setRest_count(5);
-//		restin.setRest_score(1);
-//		dao.insert(restin);
+		RestVO restin = new RestVO();
+		restin.setUser_id(1000047);
+		restin.setRest_name("秀梅");
+		restin.setRest_address("中大");
+		restin.setRest_phone("03-3932819");
+		restin.setRest_trans("");
+		restin.setRest_detail("5555");
+		restin.setRest_hours("10:00~22:00");
+		restin.setRest_ter(2);
+		restin.setRest_floor(3);
+		restin.setRest_lon(new Double(121.000));
+		restin.setRest_lat(new Double(25.333));
+		restin.setRest_inout(2);
+		restin.setRest_type(3);
+		restin.setRest_count(5);
+		restin.setRest_score(1);
+		dao.insert(restin);
 		
 		//刪除
-		dao.delete(3000027);
+//		dao.delete(3000023);
+//		dao.delete(3000024);
+		
+		//更新
+		RestVO restup = new RestVO();
+		restup.setRest_phone("9527");
+		restup.setRest_detail("測試");
+		restup.setUser_id(1000047);
+		dao.update(restup);
 		//查詢一筆
 		RestVO restVOPK = dao.findByPrimaryKey(3000001);
 		System.out.print("餐廳編號:"+restVOPK.getRest_id() + "\n");
