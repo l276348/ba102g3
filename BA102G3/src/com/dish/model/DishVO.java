@@ -4,12 +4,29 @@ public class DishVO {
 	private Integer dish_id;
 	private Integer rest_id;
 	private String dish_name;
-	private String dish_detail;
 	private Integer dish_price;
 	private Integer dish_status;
+	private String dish_detail;
 	private String dish_note;
+	
+	
+	
 	public DishVO() {
+		super();
 	}
+	
+	public DishVO(Integer dish_id, Integer rest_id, String dish_name, Integer dish_price, Integer dish_status,
+			String dish_detail, String dish_note) {
+		super();
+		this.dish_id = dish_id;
+		this.rest_id = rest_id;
+		this.dish_name = dish_name;
+		this.dish_price = dish_price;
+		this.dish_status = dish_status;
+		this.dish_detail = dish_detail;
+		this.dish_note = dish_note;
+	}
+	
 	public Integer getDish_id() {
 		return dish_id;
 	}

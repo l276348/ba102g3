@@ -18,12 +18,14 @@ public class RestJDBCDAO implements RestDAO_Interface {
 	private static final String INSERT_STMT = 
 			"INSERT INTO rest (rest_id,user_id,rest_name,rest_address,rest_phone,rest_trans,rest_detail,rest_hours,"
 			+ "rest_ter,rest_floor,rest_lon,rest_lat,rest_inout,rest_type,rest_count,rest_score) VALUES (rest_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String DELETE = 
-			"DELETE FROM REST where REST_ID = ?";	
-	private static final String GET_ALL_STMT = "SELECT * FROM REST";
-	private static final String GET_ONE_STMT = "SELECT rest_id,rest_name,rest_phone FROM rest where rest_id = ?";
 	private static final String UPDATE = 
 			"UPDATE REST set REST_PHONE=?, REST_DETAIL=? where USER_ID = ?";
+	private static final String DELETE = 
+			"DELETE FROM REST where REST_ID = ?";	
+	private static final String GET_ONE_STMT = "SELECT rest_id,rest_name,rest_phone FROM rest where rest_id = ?";
+	private static final String GET_ALL_STMT = "SELECT * FROM REST";
+	
+	
 	@Override
 	public void insert(RestVO restVO) {
 		Connection con = null;
@@ -188,7 +190,6 @@ public class RestJDBCDAO implements RestDAO_Interface {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// empVo ¤]ºÙ¬° Domain objects
 				restVO = new RestVO();
 				restVO.setRest_id(rs.getInt("rest_id"));
 				restVO.setRest_name(rs.getString("rest_name"));

@@ -21,6 +21,30 @@ public class RestVO implements Serializable{
 	private Integer rest_score;
 	
 	public RestVO(){
+		super();
+	}
+
+	public RestVO(Integer rest_id, Integer user_id, String rest_name, String rest_address, String rest_phone,
+			String rest_trans, String rest_detail, String rest_hours, Integer rest_ter, Integer rest_floor,
+			Double rest_lon, Double rest_lat, Integer rest_inout, Integer rest_type, Integer rest_count,
+			Integer rest_score) {
+		super();
+		this.rest_id = rest_id;
+		this.user_id = user_id;
+		this.rest_name = rest_name;
+		this.rest_address = rest_address;
+		this.rest_phone = rest_phone;
+		this.rest_trans = rest_trans;
+		this.rest_detail = rest_detail;
+		this.rest_hours = rest_hours;
+		this.rest_ter = rest_ter;
+		this.rest_floor = rest_floor;
+		this.rest_lon = rest_lon;
+		this.rest_lat = rest_lat;
+		this.rest_inout = rest_inout;
+		this.rest_type = rest_type;
+		this.rest_count = rest_count;
+		this.rest_score = rest_score;
 	}
 
 	public String getRest_trans() {

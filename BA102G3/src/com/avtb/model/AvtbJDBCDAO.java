@@ -1,6 +1,7 @@
 package com.avtb.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,21 +9,57 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rest.model.RestVO;
-import com.reta.model.RetaJDBCDAO;
-import com.reta.model.RetaVO;
-
 public class AvtbJDBCDAO implements AvtbDAO_Interface {
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "BA102G3";
 	String passwd = "123456";
-	
+	private static final String INSERT_STMT = 
+			"INSERT INTO AVTB (AVTB_ID,REST_ID,AVTB_DATE_S,AVTB_DATE_E,AVTB_RESERVATION,AVTB_MAX_RESERVATION) VALUES (avtb_sq.NEXTVAL, ?, ?, ?, ?, ?)";
 	private static final String GET_ALL_STMT = "SELECT * FROM AVTB";
 	
 	@Override
 	public void insert(AvtbVO avtbVO) {
-		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(INSERT_STMT);
+			
+			pstmt.setInt(1, avtbVO.getAvtb_id());
+			pstmt.setInt(2, avtbVO.getRest_id());
+			pstmt.setDate(3, (Date)avtbVO.getAvtb_date_s());
+			
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 
 	}
 
